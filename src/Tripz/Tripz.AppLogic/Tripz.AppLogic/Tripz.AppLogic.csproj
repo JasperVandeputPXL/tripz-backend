@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tripz.Domain\Tripz.Domain\Tripz.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

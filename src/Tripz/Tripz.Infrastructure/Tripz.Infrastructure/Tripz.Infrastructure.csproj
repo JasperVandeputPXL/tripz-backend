@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tripz.AppLogic\Tripz.AppLogic\Tripz.AppLogic.csproj" />
+  </ItemGroup>
+
 </Project>
