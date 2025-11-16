@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tripz.AppLogic\Tripz.AppLogic\Tripz.AppLogic.csproj" />
+    <ProjectReference Include="..\Tripz.Infrastructure\Tripz.Infrastructure\Tripz.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

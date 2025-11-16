@@ -1,6 +1,11 @@
+using Tripz.AppLogic;
+using Tripz.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<ITripRepository, InMemoryTripRepository>();
+builder.Services.AddScoped<ITripService, TripService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
