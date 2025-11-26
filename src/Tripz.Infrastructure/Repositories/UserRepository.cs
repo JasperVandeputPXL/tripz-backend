@@ -1,51 +1,63 @@
-﻿using Tripz.AppLogic;
+﻿using Microsoft.EntityFrameworkCore;
+using Tripz.AppLogic;
 using Tripz.Domain.Entities;
+using Tripz.Infrastructure.Data;
 
-namespace Tripz.Infrastructure.Repositories;
-
-public class InMemoryUserRepository : IUserRepository
+namespace Tripz.Infrastructure.Repositories
 {
-    private readonly List<User> _users = new()
+    public class UserRepository : IUserRepository
     {
-        new User { Id = 1, CompanyEmail = "manager@company.com", Password = "1234", Role = "Manager" },
-        new User { Id = 2, CompanyEmail = "employee@company.com", Password = "1234", Role = "Employee" }
-    };
+        private readonly TripzDbContext _context;
 
-    public User? FindByIdentifier(string identifier)
-    {
-        return _users.FirstOrDefault(u =>
-            u.CompanyEmail == identifier || u.Nickname == identifier);
-    }
-
-    public User RegisterNickname(string nickname, string password)
-    {
-        var user = new User
+        public UserRepository(TripzDbContext context)
         {
-            Id = _users.Count + 1,
-            Nickname = nickname,
-            Password = password,
-            Role = "Employee"
-        };
-        _users.Add(user);
-        return user;
-    }
+            _context = context;
+        }
 
-    public User? Login(string identifier, string password)
-    {
-        var existing = FindByIdentifier(identifier);
-
-        if (identifier.Contains("@"))
+        public async Task<User?> FindByIdentifierAsync(string identifier)
         {
+            return await _context.Users
+                .FirstOrDefaultAsync(u =>
+                    u.CompanyEmail == identifier ||
+                    u.Nickname == identifier);
+        }
+
+        public async Task<User> RegisterNicknameAsync(string nickname, string password)
+        {
+            var user = new User
+            {
+                Nickname = nickname,
+                Password = password,
+                Role = "Employee"
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
+
+        public async Task<User?> LoginAsync(string identifier, string password)
+        {
+            var existing = await FindByIdentifierAsync(identifier);
+
+            if (identifier.Contains("@"))
+            {
+                if (existing == null)
+                    return null;
+
+                return existing.Password == password ? existing : null;
+            }
+
             if (existing == null)
-                return null;
+                return await RegisterNicknameAsync(identifier, password);
+
             return existing.Password == password ? existing : null;
         }
 
-        if (existing == null)
-            return RegisterNickname(identifier, password);
-
-        return existing.Password == password ? existing : null;
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
     }
-
-    public IEnumerable<User> GetAll() => _users;
 }

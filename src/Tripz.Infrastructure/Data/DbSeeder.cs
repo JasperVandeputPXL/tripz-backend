@@ -109,6 +109,17 @@ namespace Tripz.Infrastructure.Data
 
             context.Trips.AddRange(trips);
             context.SaveChanges();
+
+            var users = new List<User>
+            {
+                new User { CompanyEmail = "manager@company.com", Password = "1234", Role = "Manager" },
+                new User { CompanyEmail = "employee@company.com", Password = "1234", Role = "Employee" },
+                new User { Nickname = "JohnDoe", Password = "abcd", Role = "Employee" },
+                new User { Nickname = "JaneS", Password = "pass", Role = "Employee" }
+            };
+
+            context.Users.AddRange(users);
+            context.SaveChanges();
         }
     }
 }
