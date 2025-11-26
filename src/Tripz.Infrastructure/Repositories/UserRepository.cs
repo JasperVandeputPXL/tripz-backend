@@ -41,16 +41,8 @@ namespace Tripz.Infrastructure.Repositories
         {
             var existing = await FindByIdentifierAsync(identifier);
 
-            if (identifier.Contains("@"))
-            {
-                if (existing == null)
-                    return null;
-
-                return existing.Password == password ? existing : null;
-            }
-
             if (existing == null)
-                return await RegisterNicknameAsync(identifier, password);
+                return null;
 
             return existing.Password == password ? existing : null;
         }
