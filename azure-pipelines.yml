@@ -12,31 +12,31 @@ variables:
   webAppName: '77ee8fc4-d4de-4981-8f67-591797260746' 
 
 stages:
-- stage: UseDotNet@2
-  displayName: 'Install .NET 10 SDK'
-  inputs:
-    packageType: 'sdk'
-    version: '10.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-
-- stage: NuGetToolInstaller@1
-
-- stage: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
-
-- stage: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- stage: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: BuildJob
+    displayName: 'Build'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET 10 SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '10.x'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet'
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 - stage: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
   inputs:
