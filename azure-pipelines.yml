@@ -9,7 +9,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   azureSubscription: 'c62d09b1-aca7-4c9e-9f36-3e6d33fc7ca7'
-  webAppName: '77ee8fc4-d4de-4981-8f67-591797260746' 
+  webAppName: 'tripz-backend' 
 
 stages:
 - stage: Build
