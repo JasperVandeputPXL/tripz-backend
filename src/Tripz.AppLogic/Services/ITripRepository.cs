@@ -6,5 +6,7 @@ namespace Tripz.AppLogic.Services
     public interface ITripRepository
     {
         Task<IEnumerable<Trip>> GetTripsAsync(GetTripsQuery query);
+        Task<Trip> CreateTripAsync(Trip trip);
+        Task<Trip?> GetTripByIdAsync(Guid id);
     }
 }
