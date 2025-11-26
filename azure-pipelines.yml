@@ -72,7 +72,7 @@ stages:
           - task: AzureRmWebAppDeployment@4
             displayName: 'Deploy Azure Web App'
             inputs:
-              azureSubscription: 'GitHub - MathijsDeWildePXL'
+              azureSubscription: '96324033-a46f-4202-85af-8fcaced23749'
               appType: 'webApp'
               WebAppName: 'tripz-backend'
               packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
