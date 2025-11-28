@@ -18,7 +18,7 @@ builder.Services.AddDbContext<TripzDbContext>(options =>
 // Register application services
 builder.Services.AddScoped<ITripService, TripService>();
 builder.Services.AddScoped<ITripRepository, TripRepository>();
-builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();

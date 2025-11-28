@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tripz.Domain.Entities;
+using Tripz.Infrastructure.Repositories;
 
 namespace Tripz.Infrastructure.Data
 {
@@ -10,6 +11,8 @@ namespace Tripz.Infrastructure.Data
         }
 
         public DbSet<Trip> Trips { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
