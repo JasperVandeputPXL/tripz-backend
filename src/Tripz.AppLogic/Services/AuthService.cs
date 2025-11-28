@@ -16,6 +16,6 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(password))
             throw new ArgumentException("Identifier and password are required.");
 
-        return _userRepository.Login(identifier, password);
+        return _userRepository.LoginAsync(identifier, password);
     }
 }
