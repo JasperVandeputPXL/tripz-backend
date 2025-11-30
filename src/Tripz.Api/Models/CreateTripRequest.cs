@@ -25,14 +25,14 @@ namespace Tripz.Api.Models
         [StringLength(100, ErrorMessage = "Destination cannot exceed 100 characters")]
         public string Destination { get; set; } = string.Empty;
 
-        [Range(typeof(decimal), "0", "999999999.99", ErrorMessage = "Distance must be greater than or equal to 0")]
+        [Range(0d, double.MaxValue, ErrorMessage = "Distance must be greater than or equal to 0")]
         public decimal Distance { get; set; }
 
         [Required(ErrorMessage = "Purpose is required")]
         [StringLength(500, ErrorMessage = "Purpose cannot exceed 500 characters")]
         public string Purpose { get; set; } = string.Empty;
 
-        [Range(typeof(decimal), "0", "999999999.99", ErrorMessage = "Estimated cost must be greater than or equal to 0")]
+        [Range(0d, double.MaxValue, ErrorMessage = "Estimated cost must be greater than or equal to 0")]
         public decimal EstimatedCost { get; set; }
     }
 }
