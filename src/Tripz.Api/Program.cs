@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using Tripz.AppLogic;
 using Tripz.AppLogic.Services;
@@ -7,9 +8,14 @@ using Tripz.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+// Add Swagger/Swashbuckle
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Tripz API", Version = "v1" });
+});
 
 // Configure in-memory database
 builder.Services.AddDbContext<TripzDbContext>(options =>
@@ -34,6 +40,14 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
+    // Enable Swagger UI
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tripz API v1");
+        //options.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
