@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Tripz.Domain.Enums;
 
 namespace Tripz.Api.Models
 {
