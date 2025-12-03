@@ -15,11 +15,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         try
         {
-            var user = _authService.LoginAsync(request.Username, request.Password);
+            var user = await _authService.LoginAsync(request.Username, request.Password);
             if (user == null)
                 return Unauthorized("Invalid credentials.");
             return Ok(user);
