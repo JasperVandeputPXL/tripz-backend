@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tripz.Api.Models;
+using Tripz.AppLogic.Commands;
 using Tripz.AppLogic.Queries;
 using Tripz.AppLogic.Services;
+using Tripz.Domain.Enums;
 
 namespace Tripz.Api.Controllers
 {
@@ -58,6 +60,55 @@ namespace Tripz.Api.Controllers
             };
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a specific trip by ID.
+        /// </summary>
+        /// <param name="id">The trip ID</param>
+        /// <returns>The trip details</returns>
+        /// <response code="200">Trip found</response>
+        /// <response code="404">Trip not found</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetTripById(Guid id)
+        {
+            var trip = await _tripService.GetTripByIdAsync(id);
+            
+            if (trip == null)
+                return NotFound();
+
+            return Ok(trip);
+        }
+
+        /// <summary>
+        /// Register a new trip for an employee.
+        /// Allows employees to submit a trip with date, destination, distance, transport type, purpose, and cost.
+        /// </summary>
+        /// <param name="request">Trip details for registration</param>
+        /// <returns>The created trip details</returns>
+        /// <response code="201">Trip successfully registered</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateTrip([FromBody] CreateTripRequest request)
+        {
+            var command = new CreateTripCommand
+            {
+                EmployeeId = request.EmployeeId,
+                EmployeeName = request.EmployeeName,
+                TransportType = (TransportType)request.TransportType,
+                DepartureDate = request.DepartureDate,
+                ReturnDate = request.ReturnDate,
+                Destination = request.Destination,
+                Distance = request.Distance,
+                Purpose = request.Purpose,
+                EstimatedCost = request.EstimatedCost
+            };
+
+            var createdTrip = await _tripService.CreateTripAsync(command);
+
+            return CreatedAtAction(nameof(GetTripById), new { id = createdTrip.Id }, createdTrip);
         }
     }
 }
