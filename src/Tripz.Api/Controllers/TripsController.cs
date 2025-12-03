@@ -91,8 +91,16 @@ namespace Tripz.Api.Controllers
         /// <response code="201">Trip successfully registered</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateTrip([FromBody] CreateTripRequest request)
         {
+            // Explicit validation for TransportType enum
+            if (!Enum.IsDefined(typeof(TransportType), request.TransportType))
+            {
+                ModelState.AddModelError(nameof(request.TransportType), "Invalid transport type value");
+                return BadRequest(ModelState);
+            }
+
             var command = new CreateTripCommand
             {
                 EmployeeId = request.EmployeeId,
