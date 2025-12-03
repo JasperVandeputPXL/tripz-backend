@@ -12,7 +12,7 @@ namespace Tripz.Api.Models
         [StringLength(100, ErrorMessage = "Employee name cannot exceed 100 characters")]
         public string EmployeeName { get; set; } = string.Empty;
 
-        [Range(1, 5, ErrorMessage = "Transport type must be between 1 and 5")]
+        [EnumDataType(typeof(TransportType), ErrorMessage = "Transport type must be a valid value")]
         public int TransportType { get; set; }
 
         [Required(ErrorMessage = "Departure date is required")]
