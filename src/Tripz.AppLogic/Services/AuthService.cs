@@ -11,11 +11,11 @@ public class AuthService
         _userRepository = userRepository;
     }
 
-    public User? Login(string identifier, string password)
+    public async Task<User?> LoginAsync(string identifier, string password)
     {
         if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(password))
             throw new ArgumentException("Identifier and password are required.");
 
-        return _userRepository.Login(identifier, password);
+        return await _userRepository.LoginAsync(identifier, password);
     }
 }
