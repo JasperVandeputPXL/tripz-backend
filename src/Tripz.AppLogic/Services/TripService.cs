@@ -1,4 +1,6 @@
-﻿using Tripz.AppLogic.Commands;
+﻿using System;
+using System.Linq;
+using Tripz.AppLogic.Commands;
 using Tripz.AppLogic.DTOs;
 using Tripz.AppLogic.Queries;
 using Tripz.Domain.Entities;
@@ -19,11 +21,35 @@ namespace Tripz.AppLogic.Services
         {
             var trips = await _tripRepository.GetTripsAsync(query);
 
-            return trips.Select(t => new TripDto
+            // Ensure filters are applied even if repository ignored them
+            var filtered = trips.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(query.EmployeeId))
+            {
+                filtered = filtered.Where(t =>
+                    string.Equals(t.User.Id.ToString(), query.EmployeeId, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (query.TransportType.HasValue)
+            {
+                filtered = filtered.Where(t => (int)t.TransportType == query.TransportType.Value);
+            }
+
+            if (query.Month.HasValue)
+            {
+                filtered = filtered.Where(t => t.DepartureDate.Month == query.Month.Value);
+            }
+
+            if (query.Year.HasValue)
+            {
+                filtered = filtered.Where(t => t.DepartureDate.Year == query.Year.Value);
+            }
+
+            return filtered.Select(t => new TripDto
             {
                 Id = t.Id,
-                EmployeeId = t.EmployeeId,
-                EmployeeName = t.EmployeeName,
+                EmployeeId = t.User.Id.ToString(),
+                EmployeeName = t.User.Nickname,
                 TransportType = t.TransportType.ToString(),
                 DepartureDate = t.DepartureDate,
                 ReturnDate = t.ReturnDate,
@@ -44,8 +70,8 @@ namespace Tripz.AppLogic.Services
             return new TripDto
             {
                 Id = trip.Id,
-                EmployeeId = trip.EmployeeId,
-                EmployeeName = trip.EmployeeName,
+                EmployeeId = trip.User.Id.ToString(),
+                EmployeeName = trip.User.Nickname,
                 TransportType = trip.TransportType.ToString(),
                 DepartureDate = trip.DepartureDate,
                 ReturnDate = trip.ReturnDate,
@@ -61,8 +87,7 @@ namespace Tripz.AppLogic.Services
             var trip = new Trip
             {
                 Id = Guid.NewGuid(),
-                EmployeeId = command.EmployeeId,
-                EmployeeName = command.EmployeeName,
+                UserId = command.UserId,
                 TransportType = command.TransportType,
                 DepartureDate = command.DepartureDate,
                 ReturnDate = command.ReturnDate,
@@ -79,8 +104,8 @@ namespace Tripz.AppLogic.Services
             return new TripDto
             {
                 Id = createdTrip.Id,
-                EmployeeId = createdTrip.EmployeeId,
-                EmployeeName = createdTrip.EmployeeName,
+                EmployeeId = createdTrip.User.Id.ToString(),
+                EmployeeName = createdTrip.User.Nickname,
                 TransportType = createdTrip.TransportType.ToString(),
                 DepartureDate = createdTrip.DepartureDate,
                 ReturnDate = createdTrip.ReturnDate,

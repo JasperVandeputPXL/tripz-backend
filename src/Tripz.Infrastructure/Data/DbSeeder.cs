@@ -7,18 +7,32 @@ namespace Tripz.Infrastructure.Data
     {
         public static void SeedData(TripzDbContext context)
         {
-            if (context.Trips.Any())
+            if (context.Users.Any())
             {
                 return; // Database already seeded
             }
 
+            // Seed users first
+            var users = new List<User>
+            {
+                new User { Id = 1, Nickname = "Manager1", CompanyEmail = "manager@company.com", Password = "1234", Role = "Manager" },
+                new User { Id = 2, Nickname = "Employee1", CompanyEmail = "employee@company.com", Password = "1234", Role = "Employee" },
+                new User { Id = 3, Nickname = "JohnDoe", CompanyEmail = "johndoe@company.com", Password = "abcd", Role = "Employee" },
+                new User { Id = 4, Nickname = "JaneS", CompanyEmail = "janes@company.com", Password = "pass", Role = "Employee" },
+                new User { Id = 5, Nickname = "BobJ", CompanyEmail = "bobj@company.com", Password = "pass", Role = "Employee" },
+                new User { Id = 6, Nickname = "AliceW", CompanyEmail = "alicew@company.com", Password = "pass", Role = "Employee" }
+            };
+
+            context.Users.AddRange(users);
+            context.SaveChanges();
+
+            // Now seed trips with UserId references
             var trips = new List<Trip>
             {
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP001",
-                    EmployeeName = "John Doe",
+                    UserId = 3, // JohnDoe
                     TransportType = TransportType.Plane,
                     DepartureDate = new DateTime(2024, 1, 15),
                     ReturnDate = new DateTime(2024, 1, 18),
@@ -32,8 +46,7 @@ namespace Tripz.Infrastructure.Data
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP002",
-                    EmployeeName = "Jane Smith",
+                    UserId = 4, // JaneS
                     TransportType = TransportType.Train,
                     DepartureDate = new DateTime(2024, 2, 10),
                     ReturnDate = new DateTime(2024, 2, 12),
@@ -47,8 +60,7 @@ namespace Tripz.Infrastructure.Data
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP001",
-                    EmployeeName = "John Doe",
+                    UserId = 3, // JohnDoe
                     TransportType = TransportType.Car,
                     DepartureDate = new DateTime(2024, 2, 20),
                     ReturnDate = new DateTime(2024, 2, 22),
@@ -62,8 +74,7 @@ namespace Tripz.Infrastructure.Data
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP003",
-                    EmployeeName = "Bob Johnson",
+                    UserId = 5, // BobJ
                     TransportType = TransportType.Bus,
                     DepartureDate = new DateTime(2024, 3, 5),
                     ReturnDate = new DateTime(2024, 3, 7),
@@ -77,8 +88,7 @@ namespace Tripz.Infrastructure.Data
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP002",
-                    EmployeeName = "Jane Smith",
+                    UserId = 4, // JaneS
                     TransportType = TransportType.Plane,
                     DepartureDate = new DateTime(2024, 3, 15),
                     ReturnDate = new DateTime(2024, 3, 20),
@@ -92,8 +102,7 @@ namespace Tripz.Infrastructure.Data
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP004",
-                    EmployeeName = "Alice Williams",
+                    UserId = 6, // AliceW
                     TransportType = TransportType.Train,
                     DepartureDate = new DateTime(2024, 1, 25),
                     ReturnDate = new DateTime(2024, 1, 27),
@@ -107,8 +116,7 @@ namespace Tripz.Infrastructure.Data
                 new Trip
                 {
                     Id = Guid.NewGuid(),
-                    EmployeeId = "EMP003",
-                    EmployeeName = "Bob Johnson",
+                    UserId = 5, // BobJ
                     TransportType = TransportType.Car,
                     DepartureDate = new DateTime(2024, 2, 5),
                     ReturnDate = new DateTime(2024, 2, 6),
@@ -122,17 +130,6 @@ namespace Tripz.Infrastructure.Data
             };
 
             context.Trips.AddRange(trips);
-            context.SaveChanges();
-
-            var users = new List<User>
-            {
-                new User { Nickname = "Manager1", CompanyEmail = "manager@company.com", Password = "1234", Role = "Manager" },
-                new User { Nickname = "Employee1", CompanyEmail = "employee@company.com", Password = "1234", Role = "Employee" },
-                new User { Nickname = "JohnDoe", CompanyEmail = "johndoe@company.com",Password = "abcd", Role = "Employee" },
-                new User { Nickname = "JaneS", CompanyEmail = "janes@company.com", Password = "pass", Role = "Employee" }
-            };
-
-            context.Users.AddRange(users);
             context.SaveChanges();
         }
     }
