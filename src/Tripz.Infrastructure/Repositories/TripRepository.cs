@@ -40,5 +40,17 @@ namespace Tripz.Infrastructure.Repositories
                 .OrderByDescending(t => t.SubmittedAt)
                 .ToListAsync();
         }
+
+        public async Task<Trip> CreateTripAsync(Trip trip)
+        {
+            _context.Trips.Add(trip);
+            await _context.SaveChangesAsync();
+            return trip;
+        }
+
+        public async Task<Trip?> GetTripByIdAsync(Guid id)
+        {
+            return await _context.Trips.FirstOrDefaultAsync(t => t.Id == id);
+        }
     }
 }
