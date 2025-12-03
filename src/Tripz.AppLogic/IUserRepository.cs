@@ -1,11 +1,12 @@
 ﻿using Tripz.Domain.Entities;
 
-namespace Tripz.AppLogic;
-
-public interface IUserRepository
+namespace Tripz.AppLogic
 {
-    User? FindByIdentifier(string identifier);
-    User? Login(string identifier, string password);
-    User RegisterNickname(string nickname, string password);
-    IEnumerable<User> GetAll();
+    public interface IUserRepository
+    {
+        Task<User?> FindByIdentifierAsync(string identifier);
+        Task<User?> LoginAsync(string identifier, string password);
+        Task<User> RegisterNicknameAsync(string nickname, string password);
+        Task<IEnumerable<User>> GetAllAsync();
+    }
 }

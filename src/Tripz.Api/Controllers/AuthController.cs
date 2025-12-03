@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var user = _authService.Login(request.Username, request.Password);
+            var user = _authService.LoginAsync(request.Username, request.Password);
             if (user == null)
                 return Unauthorized("Invalid credentials.");
             return Ok(user);
