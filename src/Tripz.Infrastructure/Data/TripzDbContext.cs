@@ -18,13 +18,26 @@ namespace Tripz.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nickname).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.CompanyEmail).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Password).IsRequired();
+                entity.Property(e => e.Role).IsRequired().HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Trip>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.EmployeeId).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.EmployeeName).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Destination).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.EstimatedCost).HasPrecision(18, 2);
+                entity.Property(e => e.Purpose).IsRequired().HasMaxLength(500);
+                
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.Trips)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

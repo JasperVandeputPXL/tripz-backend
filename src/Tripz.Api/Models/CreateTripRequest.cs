@@ -5,14 +5,10 @@ namespace Tripz.Api.Models
 {
     public class CreateTripRequest
     {
-        [Required(ErrorMessage = "Employee ID is required")]
-        [StringLength(50, ErrorMessage = "Employee ID cannot exceed 50 characters")]
-        public string EmployeeId { get; set; } = string.Empty;
+        [Required(ErrorMessage = "User ID is required")]
+        public int UserId { get; set; }
 
-        [Required(ErrorMessage = "Employee name is required")]
-        [StringLength(100, ErrorMessage = "Employee name cannot exceed 100 characters")]
-        public string EmployeeName { get; set; } = string.Empty;
-
+        [Required(ErrorMessage = "Transport type is required")]
         [EnumDataType(typeof(TransportType), ErrorMessage = "Transport type must be a valid value")]
         public int TransportType { get; set; }
 

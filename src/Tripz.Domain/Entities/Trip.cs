@@ -5,8 +5,8 @@ namespace Tripz.Domain.Entities
     public class Trip
     {
         public Guid Id { get; set; }
-        public string EmployeeId { get; set; } = string.Empty;
-        public string EmployeeName { get; set; } = string.Empty;
+        public int UserId { get; set; }
+        public User User { get; set; } = null!;
         public TransportType TransportType { get; set; }
         public DateTime DepartureDate { get; set; }
         public DateTime ReturnDate { get; set; }

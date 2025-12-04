@@ -8,7 +8,7 @@ using Tripz.Domain.Enums;
 namespace Tripz.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class TripsController : ControllerBase
     {
         private readonly ITripService _tripService;
@@ -75,7 +75,7 @@ namespace Tripz.Api.Controllers
         public async Task<IActionResult> GetTripById(Guid id)
         {
             var trip = await _tripService.GetTripByIdAsync(id);
-            
+
             if (trip == null)
                 return NotFound();
 
@@ -95,8 +95,7 @@ namespace Tripz.Api.Controllers
         {
             var command = new CreateTripCommand
             {
-                EmployeeId = request.EmployeeId,
-                EmployeeName = request.EmployeeName,
+                UserId = request.UserId,
                 TransportType = (TransportType)request.TransportType,
                 DepartureDate = request.DepartureDate,
                 ReturnDate = request.ReturnDate,

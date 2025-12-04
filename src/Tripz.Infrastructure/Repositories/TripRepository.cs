@@ -17,11 +17,16 @@ namespace Tripz.Infrastructure.Repositories
 
         public async Task<IEnumerable<Trip>> GetTripsAsync(GetTripsQuery query)
         {
-            var tripsQuery = _context.Trips.AsQueryable();
+            var tripsQuery = _context.Trips
+                .Include(t => t.User)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(query.EmployeeId))
             {
-                tripsQuery = tripsQuery.Where(t => t.EmployeeId == query.EmployeeId);
+                if (int.TryParse(query.EmployeeId, out int userId))
+                {
+                    tripsQuery = tripsQuery.Where(t => t.UserId == userId);
+                }
             }
 
             if (query.TransportType.HasValue)
@@ -45,12 +50,18 @@ namespace Tripz.Infrastructure.Repositories
         {
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
+            
+            // Load the User navigation property after creation
+            await _context.Entry(trip).Reference(t => t.User).LoadAsync();
+            
             return trip;
         }
 
         public async Task<Trip?> GetTripByIdAsync(Guid id)
         {
-            return await _context.Trips.FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Trips
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }
