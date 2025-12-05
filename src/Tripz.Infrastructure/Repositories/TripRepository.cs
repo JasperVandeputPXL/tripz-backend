@@ -63,5 +63,15 @@ namespace Tripz.Infrastructure.Repositories
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
+
+        public async Task<IEnumerable<Trip>> GetTripsForEmployeeAsync(int employeeId)
+        {
+            return await _context.Trips
+                .Include(t => t.User)
+                .Where(t => t.UserId == employeeId)
+                .OrderByDescending(t => t.SubmittedAt)
+                .ToListAsync();
+        }
+
     }
 }
