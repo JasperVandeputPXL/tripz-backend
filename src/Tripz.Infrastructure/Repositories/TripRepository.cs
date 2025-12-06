@@ -63,5 +63,11 @@ namespace Tripz.Infrastructure.Repositories
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
+
+        public async Task UpdateTripAsync(Trip trip)
+        {
+            _context.Trips.Update(trip);
+            await _context.SaveChangesAsync();
+        }
     }
 }
