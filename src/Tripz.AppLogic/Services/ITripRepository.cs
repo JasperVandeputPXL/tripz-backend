@@ -8,5 +8,6 @@ namespace Tripz.AppLogic.Services
         Task<IEnumerable<Trip>> GetTripsAsync(GetTripsQuery query);
         Task<Trip> CreateTripAsync(Trip trip);
         Task<Trip?> GetTripByIdAsync(Guid id);
+        Task UpdateTripAsync(Trip trip);
     }
 }
