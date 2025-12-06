@@ -109,5 +109,12 @@ namespace Tripz.Api.Controllers
 
             return CreatedAtAction(nameof(GetTripById), new { id = createdTrip.Id }, createdTrip);
         }
+
+        [HttpGet("employee")]
+        public async Task<IActionResult> GetTripsForEmployee([FromQuery] int userId)
+        {
+            var trips = await _tripService.GetTripsForEmployeeAsync(userId);
+            return Ok(trips);
+        }
     }
 }

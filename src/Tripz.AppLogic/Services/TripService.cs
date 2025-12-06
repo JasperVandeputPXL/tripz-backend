@@ -115,5 +115,25 @@ namespace Tripz.AppLogic.Services
                 SubmittedAt = createdTrip.SubmittedAt
             };
         }
+
+        public async Task<IEnumerable<TripDto>> GetTripsForEmployeeAsync(int employeeId)
+        {
+            var trips = await _tripRepository.GetTripsForEmployeeAsync(employeeId);
+
+            return trips.Select(t => new TripDto
+            {
+                Id = t.Id,
+                EmployeeId = t.User.Id.ToString(),
+                EmployeeName = t.User.Nickname,
+                TransportType = t.TransportType.ToString(),
+                DepartureDate = t.DepartureDate,
+                ReturnDate = t.ReturnDate,
+                Destination = t.Destination,
+                EstimatedCost = t.EstimatedCost,
+                Status = t.Status.ToString(),
+                SubmittedAt = t.SubmittedAt
+            });
+        }
+
     }
 }
